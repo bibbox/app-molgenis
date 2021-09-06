@@ -30,7 +30,7 @@ services:
       - db_uri=jdbc:postgresql://postgres/molgenis
       - db_user=molgenis
       - db_password=molgenis
-      - admin.password=admin
+      - admin.password=§§ADMIN_PASSWORD
       - MINIO_BUCKET_NAME=molgenis
       - MINIO_ENDPOINT=http://minio:9000
       - MINIO_ACCESS_KEY=molgenis
