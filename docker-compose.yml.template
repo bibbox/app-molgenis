@@ -10,6 +10,8 @@ services:
     container_name: §§INSTANCE-molgenis-frontend
     ports:
       - §§PORT1:80
+    networks:
+      - bibbox-default-network
     volumes: 
       - ./data/backend.conf:/etc/nginx/proxy.d/backend.conf
     depends_on:
@@ -61,6 +63,8 @@ services:
       - POSTGRES_USER=molgenis
       - POSTGRES_PASSWORD=molgenis
       - POSTGRES_DB=molgenis
+    networks:
+      - bibbox-default-network
     ports:
       - §§PORT3:5432
     volumes:
@@ -80,6 +84,8 @@ services:
         hard: -1
     volumes:
       - ./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data
+    networks:
+      - bibbox-default-network
     ports:
       - §§PORT4:9200
       - §§PORT5:9300
@@ -88,6 +94,8 @@ services:
     container_name: §§INSTANCE-molgenis-kibana
     profiles:
       - audit
+    networks:
+      - bibbox-default-network
     ports:
       - §§PORT8:5601
   §§INSTANCE-molgenis-kibana-dashboard:
@@ -102,6 +110,8 @@ services:
       - "/root/dashboard/import.sh"
     environment:
       DASHBOARD_FILE: https://raw.githubusercontent.com/molgenis/molgenis/master/.kibana/dashboard.json
+    networks:
+      - bibbox-default-network
     volumes:
       - ./data:/root/dashboard:ro
   §§INSTANCE-molgenis-filebeat:
@@ -111,6 +121,8 @@ services:
       - audit
     environment:
       ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    networks:
+      - bibbox-default-network
     volumes:
       - ./data/usr/share/filebeat/input/:/usr/share/filebeat/input/
       - ./data/usr/share/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
@@ -121,6 +133,8 @@ services:
     container_name: §§INSTANCE-molgenis-opencpu
 #    profiles:
 #      - opencpu
+    networks:
+      - bibbox-default-network
     ports:
       - §§PORT7:8004
   §§INSTANCE-molgenis-minio:
@@ -128,6 +142,8 @@ services:
     container_name: §§INSTANCE-molgenis-minio
     volumes:
       - /data/minio/data:/data
+    networks:
+      - bibbox-default-network
     ports:
       - §§PORT6:9000
     environment:
