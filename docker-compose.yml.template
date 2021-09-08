@@ -9,14 +9,19 @@ services:
     image: molgenis/molgenis-frontend:8.7.2
     container_name: §§INSTANCE-molgenis-frontend
     ports:
-      - "§§PORT1:80"
+      - §§PORT1:80
     volumes: 
       - ./data/backend.conf:/etc/nginx/proxy.d/backend.conf
     depends_on:
-      - "§§INSTANCE-molgenis"
+      - §§INSTANCE-molgenis
     links:
-      - §§INSTANCE-molgenis:bibbox-molgenis
-        
+      - §§INSTANCE-molgenis:molgenis
+    proxy:
+     TYPE: PRIMARY
+     URLPREFIX: §§INSTANCE
+     TEMPLATE: default
+     DISPLAYNAME: 'Molgenis'  
+
   §§INSTANCE-molgenis:
     image: molgenis/molgenis-app:8.7.2
     container_name: §§INSTANCE-molgenis
@@ -38,7 +43,7 @@ services:
       - MOLGENIS_MAX_FILE_MB=150
       - "CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
     ports:
-        - "§§PORT2:8080"
+        - §§PORT2:8080
     links:
         - §§INSTANCE-molgenis-postgres:postgres
         - §§INSTANCE-molgenis-minio:minio
