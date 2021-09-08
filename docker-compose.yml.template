@@ -44,8 +44,8 @@ services:
       - MINIO_SECRET_KEY=molgenis
       - MOLGENIS_MAX_FILE_MB=150
       - "CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
-    expose:
-        - "8080"
+    ports:
+        - "8080:8080"
     links:
         - §§INSTANCE-molgenis-postgres:postgres
         - §§INSTANCE-molgenis-minio:minio
@@ -66,7 +66,7 @@ services:
     networks:
       - bibbox-default-network
     expose:
-      - "5432"
+      - "5432:5432"
     volumes:
       - ./data/var/lib/postgresql/data:/var/lib/postgresql/data
     command: -c 'shared_buffers=256MB' -c 'max_locks_per_transaction=1024'
