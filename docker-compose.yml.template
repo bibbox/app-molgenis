@@ -44,6 +44,11 @@ services:
       - MINIO_SECRET_KEY=molgenis
       - MOLGENIS_MAX_FILE_MB=150
       - "CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
+    proxy:
+     TYPE: PRIMARY
+     URLPREFIX: §§INSTANCE
+     TEMPLATE: default
+     DISPLAYNAME: 'Molgenis'  
     ports:
         - "8080:8080"
     links:
