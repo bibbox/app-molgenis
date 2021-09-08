@@ -8,8 +8,8 @@ services:
   §§INSTANCE-molgenis-frontend:
     image: molgenis/molgenis-frontend:8.7.2
     container_name: §§INSTANCE-molgenis-frontend
-    ports:
-      - §§PORT1:80
+#    ports:
+#      - §§PORT1:80
     networks:
       - bibbox-default-network
     volumes: 
@@ -44,8 +44,8 @@ services:
       - MINIO_SECRET_KEY=molgenis
       - MOLGENIS_MAX_FILE_MB=150
       - "CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
-    ports:
-        - §§PORT2:8080
+#    ports:
+#        - §§PORT2:8080
     links:
         - §§INSTANCE-molgenis-postgres:postgres
         - §§INSTANCE-molgenis-minio:minio
@@ -65,8 +65,8 @@ services:
       - POSTGRES_DB=molgenis
     networks:
       - bibbox-default-network
-    ports:
-      - §§PORT3:5432
+#    ports:
+#      - §§PORT3:5432
     volumes:
       - ./data/var/lib/postgresql/data:/var/lib/postgresql/data
     command: -c 'shared_buffers=256MB' -c 'max_locks_per_transaction=1024'
@@ -86,9 +86,9 @@ services:
       - ./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data
     networks:
       - bibbox-default-network
-    ports:
-      - §§PORT4:9200
-      - §§PORT5:9300
+#    ports:
+#      - §§PORT4:9200
+#      - §§PORT5:9300
   §§INSTANCE-molgenis-kibana:
     image: docker.elastic.co/kibana/kibana:5.5.3
     container_name: §§INSTANCE-molgenis-kibana
@@ -96,8 +96,8 @@ services:
       - audit
     networks:
       - bibbox-default-network
-    ports:
-      - §§PORT8:5601
+#    ports:
+#      - §§PORT8:5601
   §§INSTANCE-molgenis-kibana-dashboard:
     user: 0:0
     image: docker.elastic.co/kibana/kibana:5.5.3
@@ -135,8 +135,8 @@ services:
 #      - opencpu
     networks:
       - bibbox-default-network
-    ports:
-      - §§PORT7:8004
+#    ports:
+#      - §§PORT7:8004
   §§INSTANCE-molgenis-minio:
     image: minio/minio:RELEASE.2019-03-20T22-38-47Z
     container_name: §§INSTANCE-molgenis-minio
@@ -144,8 +144,8 @@ services:
       - /data/minio/data:/data
     networks:
       - bibbox-default-network
-    ports:
-      - §§PORT6:9000
+#    ports:
+#      - §§PORT6:9000
     environment:
       MINIO_ACCESS_KEY: molgenis
       MINIO_SECRET_KEY: molgenis
