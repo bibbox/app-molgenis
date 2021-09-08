@@ -119,8 +119,8 @@ services:
   §§INSTANCE-molgenis-opencpu:
     image: molgenis/opencpu:opencpu-release-2019-03-20_12-07-11
     container_name: §§INSTANCE-molgenis-opencpu
-    profiles:
-      - opencpu
+#    profiles:
+#      - opencpu
     ports:
       - §§PORT7:8004
   §§INSTANCE-molgenis-minio:
