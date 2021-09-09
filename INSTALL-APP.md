@@ -8,14 +8,14 @@ Be patient this can take up to 5 minutes (its a huge app). The last message in t
 
 ### Log in with the username admin and the password you specified in the installation 
 If you forget the password, just loock in the Install Log in the Apps admin dashboard. 
-![Screenshot01](install-screen-01.png)
+![Screenshot01](assets/install-screen-01.png)
 
 ### Make all further configuration steps within the Molgenis app.
 Further information can be found here http://molgenis.github.io/documentation/.
 
-![Screenshot02](install-screen-02.png)
+![Screenshot02](assets/install-screen-02.png)
 
 ## After the installation
 Have a nice ride with the Admins youngtimer.
 
-![FINAL](install-screen-final.jpg)
+![FINAL](assets/install-screen-final.jpg)
