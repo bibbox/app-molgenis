@@ -1,102 +1,131 @@
-version: "2.0"
+version: '3'
+
+networks:
+  bibbox-default-network:
+    external: true
 services:
+  bibbox-molgenis:
+    container_name: bibbox-molgenis
+    depends_on:
+    - bibbox-molgenis-postgres
+    environment:
+    - molgenis.home=/home/molgenis
+    - opencpu.uri.host=opencpu
+    - elasticsearch.transport.addresses=elasticsearch:9300
+    - db_uri=jdbc:postgresql://postgres/molgenis
+    - db_user=molgenis
+    - db_password=molgenis
+    - admin.password=admin
+    - MINIO_BUCKET_NAME=molgenis
+    - MINIO_ENDPOINT=http://minio:9000
+    - MINIO_ACCESS_KEY=molgenis
+    - MINIO_SECRET_KEY=molgenis
+    - MOLGENIS_MAX_FILE_MB=150
+    - CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled
+    image: molgenis/molgenis-app:8.7.2
+    links:
+    - bibbox-molgenis-postgres:postgres
+    - bibbox-molgenis-minio:minio
+    - bibbox-molgenis-elasticsearch:elasticsearch
+    - bibbox-molgenis-opencpu:opencpu
+    networks:
+    - bibbox-default-network
+    restart: unless-stopped
+    volumes:
+    - ./data/home/molgenis:/home/molgenis
+  bibbox-molgenis-elasticsearch:
+    container_name: bibbox-molgenis-elasticsearch
+    environment:
+    - cluster.name=molgenis
+    - bootstrap.memory_lock=true
+    - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    - discovery.type=single-node
+    image: molgenis/molgenis-elasticsearch:1.0.0
+    networks:
+    - bibbox-default-network
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+    volumes:
+    - ./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data
+  bibbox-molgenis-filebeat:
+    container_name: bibbox-molgenis-filebeat
+    depends_on:
+    - bibbox-molgenis-elasticsearch
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    image: docker.elastic.co/beats/filebeat-oss:7.9.3
+    networks:
+    - bibbox-default-network
+    profiles:
+    - audit
+    volumes:
+    - ./data/usr/share/filebeat/input/:/usr/share/filebeat/input/
+    - ./data/usr/share/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+  bibbox-molgenis-frontend:
+    container_name: bibbox-molgenis-frontend
+    depends_on:
+    - bibbox-molgenis
+    image: molgenis/molgenis-frontend:8.7.2
+    links:
+    - bibbox-molgenis:molgenis
+    networks:
+    - bibbox-default-network
+    ports:
+      - "80:80"
+    volumes:
+    - ./data/backend.conf:/etc/nginx/proxy.d/backend.conf
+  bibbox-molgenis-kibana:
+    container_name: bibbox-molgenis-kibana
+    image: docker.elastic.co/kibana/kibana:5.5.3
+    networks:
+    - bibbox-default-network
+    profiles:
+    - audit
+  bibbox-molgenis-kibana-dashboard:
+    command:
+    - /bin/sh
+    - -c
+    - /root/dashboard/import.sh
+    container_name: bibbox-molgenis-kibana-dashboard
+    environment:
+      DASHBOARD_FILE: https://raw.githubusercontent.com/molgenis/molgenis/master/.kibana/dashboard.json
+    image: docker.elastic.co/kibana/kibana:5.5.3
+    networks:
+    - bibbox-default-network
+    profiles:
+    - audit
+    user: 0:0
+    volumes:
+    - ./data:/root/dashboard:ro
+  bibbox-molgenis-minio:
+    command: server /data
+    container_name: bibbox-molgenis-minio
+    environment:
+      MINIO_ACCESS_KEY: molgenis
+      MINIO_SECRET_KEY: molgenis
+    image: minio/minio:RELEASE.2019-03-20T22-38-47Z
+    networks:
+    - bibbox-default-network
+    volumes:
+    - /data/minio/data:/data
+  bibbox-molgenis-opencpu:
+    container_name: bibbox-molgenis-opencpu
+    image: molgenis/opencpu:opencpu-release-2019-03-20_12-07-11
+    networks:
+    - bibbox-default-network
+  bibbox-molgenis-postgres:
+    command: -c 'shared_buffers=256MB' -c 'max_locks_per_transaction=1024'
+    container_name: bibbox-molgenis-postgres
+    environment:
+    - POSTGRES_USER=molgenis
+    - POSTGRES_PASSWORD=molgenis
+    - POSTGRES_DB=molgenis
+    image: postgres:11-alpine
+    networks:
+    - bibbox-default-network
+    volumes:
+    - ./data/var/lib/postgresql/data:/var/lib/postgresql/data
 
-    bibbox-molgenis:
-      image: registry.molgenis.org/molgenis/molgenis-app:latest
-      container_name: bibbox-molgenis
-      environment:
-        - molgenis.home=/home/molgenis
-        - opencpu.uri.host=opencpu
-        - elasticsearch.transport.addresses=elasticsearch:9300
-        - db_uri=jdbc:postgresql://postgres/molgenis
-        - db_user=molgenis
-        - db_password=molgenis
-        - admin.password=admin
-        - MINIO_BUCKET_NAME=molgenis
-        - MINIO_ENDPOINT=http://minio:9000
-        - MINIO_ACCESS_KEY=molgenis
-        - MINIO_SECRET_KEY=molgenis
-        - "CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
-      ports:
-        - "8081:8080"
-      links:
-        - bibbox-molgenis-postgres:postgres
-        - bibbox-molgenis-minio:minio
-        - bibbox-molgenis-elasticsearch:elasticsearch
-        - bibbox-molgenis-opencpu:opencpu
-      volumes_from: 
-        - bibbox-molgenis-data
-      depends_on:
-        - bibbox-molgenis-postgres
 
-
-    bibbox-molgenis-frontend:
-  
-      image: molgenis/molgenis-frontend:latest
-      ports:
-        - "82:80"
-      volumes: 
-        - ./backend.conf:/etc/nginx/proxy.d/backend.conf
-      volumes_from: 
-        - bibbox-molgenis-data
-      depends_on:
-        - "bibbox-molgenis"
-    
-    bibbox-molgenis-postgres:
-      image: postgres:11-alpine
-      container_name: bibbox-molgenis-postgres
-      environment:
-        - POSTGRES_USER=molgenis
-        - POSTGRES_PASSWORD=molgenis
-        - POSTGRES_DB=molgenis
-      expose:
-        - "5432"
-      volumes_from: 
-        - bibbox-molgenis-data
-      command: -c 'shared_buffers=256MB' -c 'max_locks_per_transaction=1024'
-
-    bibbox-molgenis-elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch:5.5.3
-      container_name: bibbox-molgenis-elasticsearch
-      environment:
-        - cluster.name=molgenis
-        - bootstrap.memory_lock=true
-        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-        - xpack.security.enabled=false
-        - discovery.type=single-node
-      ulimits:
-        memlock:
-          soft: -1
-          hard: -1
-      volumes_from: 
-          - bibbox-molgenis-data
-      ports:
-        - 9200:9200
-        - 9300:9300
-
-    bibbox-molgenis-opencpu:
-        image: molgenis/opencpu:opencpu-release-2019-03-20_12-07-11
-        container_name: bibbox-molgenis-opencpu
-        ports:
-          - 8004:8004
-
-    bibbox-molgenis-minio:
-      image: minio/minio:RELEASE.2019-03-20T22-38-47Z
-      container_name: bibbox-molgenis-minio
-      volumes_from: 
-        - bibbox-molgenis-data
-      ports:
-        - 9000:9000
-      environment:
-        MINIO_ACCESS_KEY: molgenis
-        MINIO_SECRET_KEY: molgenis
-      command: server /data
-
-    bibbox-molgenis-data:
-        image: busybox
-        container_name: bibbox-molgenis-data
-        volumes:
-          - ./data/var/lib/postgresql/data:/var/lib/postgresql/data
-          - ./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data
-          - ./data/home/molgenis:/home/molgenis
-          - ./data/minio/data:/data
