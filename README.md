@@ -2,7 +2,7 @@
 
 ## Hints
 * approx. time with medium fast internet connection: **15 minutes**
-* initial user/passwordd: **admin / '<'set during instalations'>'**
+* initial user/password: **admin / '<'set during instalations'>'**
 
 ## Docker Images Used
  * [molgenis/molgenis-frontend:8.7.2](https://hub.docker.com/r/molgenis/molgenis-frontend/), offical molgenis-frontend container 
@@ -30,4 +30,4 @@
 * Run **docker-compose up** in the root folder of the project. After a few minutes OpenSpecimen is reachable via **http://localhost**.  
 * Default admin login: user:admin/pw:admin. 
 * This can be changed in `docker-compose.yml`.
-* Alternatively on a *Linux* system run the bash script `intsall.sh`.
+* **Alternatively** on a *Linux* system run the bash script `intsall.sh`.
