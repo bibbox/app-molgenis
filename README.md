@@ -47,7 +47,9 @@ Within BIBBOX you can use the [BIBBOX APP Store](http://bibbox.readthedocs.io/en
 ## Install Environment Variables
 
  * ADMIN_PASSWORD = admin user password
+ 
 The default values for the standalone installation are:
+
  * ADMIN_PASSWORD = admin
 
 ## Mounted Volumes
