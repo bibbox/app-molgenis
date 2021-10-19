@@ -53,4 +53,8 @@ The default values for the standalone installation are:
  * ADMIN_PASSWORD = admin
 
 ## Mounted Volumes
-
+* ./data/backend.conf
+* ./data/home/molgenis
+* ./data/var/lib/postgresql/data
+* ./data/usr/share/elasticsearch/data
+* /data/minio/data
