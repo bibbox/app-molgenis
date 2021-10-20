@@ -35,6 +35,14 @@ The default admin login is **user:admin/pw:admin**, this can be changed in `dock
 
 Within BIBBOX you can use the [BIBBOX APP Store](http://bibbox.readthedocs.io/en/latest/admin-documentation/ "BIBBOX App Store") to install a lot of software tools. After the installation is finished you can start your application in the dashboard.
 
+### Install Environment Variables
+
+ * ADMIN_PASSWORD = admin user password
+ 
+The default values for the standalone installation are:
+
+ * ADMIN_PASSWORD = admin
+
 ## Docker Images Used
  * [molgenis/molgenis-frontend:8.7.2](https://hub.docker.com/r/molgenis/molgenis-frontend/), offical molgenis-frontend container 
  * [molgenis/molgenis-app:8.7.2](https://hub.docker.com/r/molgenis/molgenis-app), offical molgenis-app container
@@ -44,17 +52,10 @@ Within BIBBOX you can use the [BIBBOX APP Store](http://bibbox.readthedocs.io/en
  * [minio/minio:RELEASE.2019-03-20T22-38-47Z](https://hub.docker.com/r/minio/minio/), offical minio/minio container
  
 
-## Install Environment Variables
-
- * ADMIN_PASSWORD = admin user password
- 
-The default values for the standalone installation are:
-
- * ADMIN_PASSWORD = admin
 
 ## Mounted Volumes
 * ./data/backend.conf
 * ./data/home/molgenis
 * ./data/var/lib/postgresql/data
 * ./data/usr/share/elasticsearch/data
-* /data/minio/data
+* ./data/minio/data
