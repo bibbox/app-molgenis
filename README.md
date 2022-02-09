@@ -33,7 +33,7 @@ The default values for the standalone installation are:
 To install the app locally execute the commands:
 * Clone the git repository: 
   * `git clone https://github.com/bibbox/app-molgenis.git`
-* change the current directory to app-molgenis: 
+* Change the current directory to app-molgenis: 
   * `cd app-molgenis/` 
 * Create the directories `data/home/molgenis`, `data/var/lib/postgresql/data`, `data/usr/share/elasticsearch/data` and `data/minio/data`:
   * `mkdir -p data/home/molgenis` 
