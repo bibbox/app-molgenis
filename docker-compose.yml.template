@@ -9,7 +9,7 @@ services:
     image: molgenis/molgenis-frontend:8.7.2
     container_name: §§INSTANCE-molgenis-frontend
     ports:
-      - "80:80"
+      - "443:443"
     networks:
       - bibbox-default-network
     volumes: 
