@@ -67,6 +67,11 @@ services:
       - "80:80"
     volumes:
     - ./data/backend.conf:/etc/nginx/proxy.d/backend.conf
+    proxy:
+     TYPE: PRIMARY
+     URLPREFIX: §§INSTANCE
+     TEMPLATE: default
+     DISPLAYNAME: 'Molgenis'  
   §§INSTANCE-molgenis-kibana:
     container_name: §§INSTANCE-molgenis-kibana
     image: docker.elastic.co/kibana/kibana:7.15.0
