@@ -9,9 +9,10 @@ services:
     depends_on:
     - bibbox-molgenis-postgres
     environment:
+    - environment=production
     - molgenis.home=/home/molgenis
     - opencpu.uri.host=opencpu
-    - elasticsearch.transport.addresses=elasticsearch:9300
+    - elasticsearch.hosts=elasticsearch:9200
     - db_uri=jdbc:postgresql://postgres/molgenis
     - db_user=molgenis
     - db_password=molgenis
@@ -21,8 +22,9 @@ services:
     - MINIO_ACCESS_KEY=molgenis
     - MINIO_SECRET_KEY=molgenis
     - MOLGENIS_MAX_FILE_MB=150
-    - CATALINA_OPTS=-Xmx1g -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled
-    image: molgenis/molgenis-app:8.7.2
+    - "CATALINA_OPTS=-Xmx1g"
+    - audit.log.path=/home/molgenis/audit/audit.log
+    image: molgenis/molgenis-app:10.1.0
     links:
     - bibbox-molgenis-postgres:postgres
     - bibbox-molgenis-minio:minio
@@ -38,9 +40,10 @@ services:
     environment:
     - cluster.name=molgenis
     - bootstrap.memory_lock=true
-    - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    - ES_JAVA_OPTS=-Xms1024m -Xmx1024m
     - discovery.type=single-node
-    image: molgenis/molgenis-elasticsearch:1.0.0
+    - xpack.security.enabled=false
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
     networks:
     - bibbox-default-network
     ulimits:
@@ -49,25 +52,27 @@ services:
         soft: -1
     volumes:
     - ./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data
-  bibbox-molgenis-filebeat:
-    container_name: bibbox-molgenis-filebeat
-    depends_on:
-    - bibbox-molgenis-elasticsearch
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-    image: docker.elastic.co/beats/filebeat-oss:7.9.3
-    networks:
-    - bibbox-default-network
-    profiles:
-    - audit
-    volumes:
-    - ./data/usr/share/filebeat/input/:/usr/share/filebeat/input/
-    - ./data/usr/share/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+#    links:
+#    - bibbox-molgenis:molgenis
+#  bibbox-molgenis-filebeat:
+#    container_name: bibbox-molgenis-filebeat
+#    depends_on:
+#    - bibbox-molgenis-elasticsearch
+#    environment:
+#      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+#    image: docker.elastic.co/beats/filebeat-oss:7.9.3
+#    networks:
+#    - bibbox-default-network
+#    profiles:
+#    - audit
+#    volumes:
+#    - ./data/usr/share/filebeat/input/:/usr/share/filebeat/input/
+#    - ./data/usr/share/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
   bibbox-molgenis-frontend:
     container_name: bibbox-molgenis-frontend
     depends_on:
     - bibbox-molgenis
-    image: molgenis/molgenis-frontend:8.7.2
+    image: molgenis/molgenis-frontend:10-lts
     links:
     - bibbox-molgenis:molgenis
     networks:
@@ -78,7 +83,7 @@ services:
     - ./data/backend.conf:/etc/nginx/proxy.d/backend.conf
   bibbox-molgenis-kibana:
     container_name: bibbox-molgenis-kibana
-    image: docker.elastic.co/kibana/kibana:5.5.3
+    image: docker.elastic.co/kibana/kibana:7.15.0
     networks:
     - bibbox-default-network
     profiles:
@@ -91,7 +96,7 @@ services:
     container_name: bibbox-molgenis-kibana-dashboard
     environment:
       DASHBOARD_FILE: https://raw.githubusercontent.com/molgenis/molgenis/master/.kibana/dashboard.json
-    image: docker.elastic.co/kibana/kibana:5.5.3
+    image: docker.elastic.co/kibana/kibana:7.15.0
     networks:
     - bibbox-default-network
     profiles:
