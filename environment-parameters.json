@@ -3,7 +3,7 @@
         "id":"ADMIN_PASSWORD",
         "display_name":"Molgenis ADMIN Password",
         "type":"password",
-        "default_value":"e.g. admin",
+        "default_value":"admin",
         "description":"Admin Password, please change for production",
         "min_length": "1",
         "max_length": "128"
@@ -12,7 +12,7 @@
         "id":"DB_PASSWORD",
         "display_name":"DB Password",
         "type":"password",
-        "default_value":"e.g. molgenis",
+        "default_value":"molgenis",
         "description":"Database password, please change for production",
         "min_length": "1",
         "max_length": "128"
