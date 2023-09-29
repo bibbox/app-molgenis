@@ -47,16 +47,16 @@ The default values for the standalone installation are:
 
   
 ## Mounted Volumes
-### molgenis/molgenis-app Conatiner
+### molgenis/molgenis-app Container
   - *./data/home/molgenis:/home/molgenis*
-### docker.elastic.co/elasticsearch/elasticsearch Conatiner
+### docker.elastic.co/elasticsearch/elasticsearch Container
   - *./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data*
-### molgenis/molgenis-frontend Conatiner
+### molgenis/molgenis-frontend Container
   - *./data/backend.conf:/etc/nginx/proxy.d/backend.conf*
-### docker.elastic.co/kibana/kibana Conatiner
+### docker.elastic.co/kibana/kibana Container
   - *./data:/root/dashboard:ro*
-### minio/minio Conatiner
+### minio/minio Container
   - */data/minio/data:/data*
-### postgres Conatiner
+### postgres Container
   - *./data/var/lib/postgresql/data:/var/lib/postgresql/data*
 
