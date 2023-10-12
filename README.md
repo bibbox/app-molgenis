@@ -1,62 +1,62 @@
-# MOLGENIS BIBBOX application
+# molgenis BIBBOX application
 
-This container can be installed as [BIBBOX APP](https://bibbox.readthedocs.io/en/latest/ "BIBBOX") or standalone.
- 
-After the installation follow these [instructions](INSTALL-APP.md)
+This container can be installed as [BIBBOX APP](https://bibbox.readthedocs.io/en/latest/ "BIBBOX App Store") or standalone. 
 
-## Hints
-* approx. time with medium fast internet connection: **15 minutes**
-* initial user/password: **admin / \<set during instalations\>**
+After the docker installation follow these [instructions](INSTALL-APP.md).
+
+## Standalone Installation 
+
+Clone the github repository. If necessary change the ports in the environment file `.env` and the volume mounts in `docker-compose.yml`.
+
+```
+git clone https://github.com/bibbox/app-molgenis
+cd app-molgenis
+docker network create bibbox-default-network
+docker-compose up -d
+```
+
+The main App can be opened and set up at:
+```
+http://localhost:80
+```
 
 ## Install within BIBBOX
 
-Within BIBBOX you can use the [BIBBOX](https://bibbox.readthedocs.io/en/latest/ "BIBBOX") to install a lot of software tools. After the installation is finished you can start your application in the dashboard.
+Visit the BIBBOX page and find the App by its name in the store. Click on the symbol and select install. Then fill the parameters below and name your App, click install again.
 
-### Install Environment Variables
+## Docker Images used
+  - [molgenis/molgenis-app](https://hub.docker.com/r/molgenis/molgenis-app) 
+  - [docker.elastic.co/elasticsearch/elasticsearch](https://hub.docker.com/r/docker.elastic.co/elasticsearch/elasticsearch) 
+  - [molgenis/molgenis-frontend](https://hub.docker.com/r/molgenis/molgenis-frontend) 
+  - [docker.elastic.co/kibana/kibana](https://hub.docker.com/r/docker.elastic.co/kibana/kibana) 
+  - [docker.elastic.co/kibana/kibana](https://hub.docker.com/r/docker.elastic.co/kibana/kibana) 
+  - [minio/minio](https://hub.docker.com/r/minio/minio) 
+  - [molgenis/opencpu](https://hub.docker.com/r/molgenis/opencpu) 
+  - [postgres](https://hub.docker.com/r/postgres) 
 
- * ADMIN_PASSWORD = admin user password
+
  
+## Install Environment Variables
+  - ADMIN_PASSWORD = Admin Password, please change for production
+  - DB_PASSWORD = Database password, please change for production
+
+  
 The default values for the standalone installation are:
+  - ADMIN_PASSWORD = admin
+  - DB_PASSWORD = molgenis
 
- * ADMIN_PASSWORD = admin
-
-## Docker Images Used
- * [molgenis/molgenis-frontend:8.7.2](https://hub.docker.com/r/molgenis/molgenis-frontend/), offical molgenis-frontend container 
- * [molgenis/molgenis-app:8.7.2](https://hub.docker.com/r/molgenis/molgenis-app), offical molgenis-app container
- * [postgres:11-alpine](https://hub.docker.com/_/postgres), offical postgres container
- * [molgenis/molgenis-elasticsearch:1.0.0](https://hub.docker.com/r/molgenis/molgenis-elasticsearch/), offical molgenis/molgenis-elasticsearch container
- * [molgenis/opencpu:opencpu-release-2019-03-20_12-07-11](https://hub.docker.com/r/molgenis/opencpu/), offical molgenis/opencpu container
- * [minio/minio:RELEASE.2019-03-20T22-38-47Z](https://hub.docker.com/r/minio/minio/), offical minio/minio container
- 
-## Standalone Installation
-
-To install the app locally execute the commands:
-* Clone the git repository: 
-  * `git clone https://github.com/bibbox/app-molgenis.git`
-* change the current directory to app-molgenis: 
-  * `cd app-molgenis/` 
-* Create the directories `data/home/molgenis`, `data/var/lib/postgresql/data`, `data/usr/share/elasticsearch/data` and `data/minio/data`:
-  * `mkdir -p data/home/molgenis` 
-  * `mkdir -p data/usr/share/elasticsearch/data`
-  * `mkdir -p data/var/lib/postgresql/data`
-  * `mkdir -p data/minio/data` 
-* Copy the file `backend.conf` to `./data/backend.conf`: 
-  * `cp backend.conf data/backend.conf`
-* Change the permission of the directory `./data`: 
-  * `chmod -R 777 data`
-* Create the docker network `bibbox-default-network`: 
-  * `docker network create bibbox-default-network`
-* Run **docker-compose up** in the root folder of the project: 
-  * `docker-compose up -d`
-* **Alternatively** on a *Linux* system run the bash script `intsall.sh` after cloning and change the working directory to the git repository directory.
- 
-
-After the installation (might take a few minutes) open **http://localhost** in your browser to access Molgenis.
-The default admin login is **user:admin/pw:admin**, this can be changed in `docker-compose.yml`.
-
+  
 ## Mounted Volumes
-* ./data/backend.conf
-* ./data/home/molgenis
-* ./data/var/lib/postgresql/data
-* ./data/usr/share/elasticsearch/data
-* ./data/minio/data
+### molgenis/molgenis-app Container
+  - *./data/home/molgenis:/home/molgenis*
+### docker.elastic.co/elasticsearch/elasticsearch Container
+  - *./data/usr/share/elasticsearch/data:/usr/share/elasticsearch/data*
+### molgenis/molgenis-frontend Container
+  - *./data/backend.conf:/etc/nginx/proxy.d/backend.conf*
+### docker.elastic.co/kibana/kibana Container
+  - *./data:/root/dashboard:ro*
+### minio/minio Container
+  - */data/minio/data:/data*
+### postgres Container
+  - *./data/var/lib/postgresql/data:/var/lib/postgresql/data*
+
