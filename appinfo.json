@@ -7,5 +7,6 @@
 	"catalogue_url": "",
 	"application_url": "http://www.molgenis.org",
 	"tags": ["Data Warehouse", "Data Integration"],
-	"application_documentation_url": "https://github.com/molgenis/molgenis/tree/master/docs"
+	"application_documentation_url": "https://github.com/molgenis/molgenis/tree/master/docs",
+	"instance_information": "<p>MOLGENIS helps to find, capture, exchange, manage and analyse scientific data. It is fully customizable: data structure, user interface and layout can be fully changed and you can plug-in your own (bioinformatics) scripts to make your MOLGENIS very special. </p>"
 }
