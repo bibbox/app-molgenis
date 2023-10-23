@@ -11,7 +11,7 @@ Once you've selected the desired App for your BIBBOX instance, you can choose fr
 
 Clicking "Install App" will open a new window, as illustrated in the following figure. Here, you can define the necessary entries. Some fields come pre-filled with suggested options, and if left unchanged, these default values will be used as the entries.
 
-![Screenshot02](assets/Molgensi_install2.png)
+![Screenshot02](assets/Molgenis_install2.png)
 
 After confirming by clicking "Install," the App will be installed as a BIBBOX instance. Once the installation is complete, you only need to follow a few steps to use the App for the first time, which are described below.
 
